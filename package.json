@@ -35,5 +35,12 @@
   },
   "dependencies": {
     "color-string": "^1.5.3"
-  }
+  },
+  "keywords": [
+    "color",
+    "colour",
+    "rgb",
+    "rgba",
+    "alpha"
+  ]
 }
