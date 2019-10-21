@@ -1,0 +1,35 @@
+{
+  "name": "rgba",
+  "version": "1.0.0",
+  "description": "Simple alpha channel modifier using template literals syntax. eg. rgba`#102030,0.3`",
+  "main": "index.js",
+  "repository": "https://github.com/QuadFlask/rgba",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc"
+  },
+  "author": "QuadFlask",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "jest": "^24.9.0",
+    "mocha": "^6.2.2",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.6.4"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testRegex": "\\.test\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "globals": {
+      "ts-jest": {
+        "enableTsDiagnostics": true
+      }
+    }
+  }
+}
