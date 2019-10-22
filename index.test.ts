@@ -14,6 +14,10 @@ it('rgba', function () {
     expect(rgba`#f00,30%`).toEqual("rgba(255,0,0,0.3)");
     expect(rgba`#fff,30%`).toEqual("rgba(255,255,255,0.3)");
     expect(rgba`#fff,.3`).toEqual("rgba(255,255,255,0.3)");
+
+    expect(rgba`${'#ff0'},.3`).toEqual("rgba(255,255,0,0.3)");
+    expect(rgba`#ff0,${0.3}`).toEqual("rgba(255,255,0,0.3)");
+    expect(rgba`${'#ff0'},${0.3}`).toEqual("rgba(255,255,0,0.3)");
 });
 
 it('rgbaOf', function () {
