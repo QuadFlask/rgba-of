@@ -1,6 +1,6 @@
 {
   "name": "rgba-of",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple alpha channel modifier using template literals syntax. eg. rgba`#102030,0.3`",
   "main": "index.js",
   "repository": "https://github.com/QuadFlask/rgba-of",
