@@ -23,4 +23,5 @@ const joinWithValues = (a: readonly string[], keys: any[]) => a.reduce((a, b, i)
     return a + (v !== undefined ? v : '') + b
 });
 
-export default rgbaOf({});
+const rgba = rgbaOf({});
+export default rgba;

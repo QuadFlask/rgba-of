@@ -30,4 +30,5 @@ var joinWithValues = function (a, keys) { return a.reduce(function (a, b, i) {
     var v = keys[i - 1];
     return a + (v !== undefined ? v : '') + b;
 }); };
-exports.default = rgbaOf({});
+var rgba = rgbaOf({});
+exports.default = rgba;
