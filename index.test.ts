@@ -22,6 +22,36 @@ it('rgba', function () {
     expect(rgba`${'#ff0'},${0.3}`).toEqual("rgba(255,255,0,0.3)");
 });
 
+it('unsupported formats', function () {
+    // invalid alpha value
+    expect(rgba`#f00,z%`).toEqual("#f00");
+    expect(rgba`#f00,asd%`).toEqual("#f00");
+    expect(rgba`#f00,-%`).toEqual("#f00");
+    expect(rgba`#f00,z`).toEqual("#f00");
+    expect(rgba`#f00,asd`).toEqual("#f00");
+    expect(rgba`#f00,`).toEqual("#f00");
+    // invalid format
+    expect(rgba`#,asd%`).toEqual("#,asd%");
+    expect(rgba`30%`).toEqual("30%");
+    expect(rgba`asd`).toEqual("asd");
+    expect(rgba``).toEqual("");
+    // invalid color format
+    expect(rgba`#11,asd%`).toEqual("#11,asd%");
+    expect(rgba`rgba(-2,3,2,1),1`).toEqual("rgba(-2,3,2,1),1");
+    expect(rgba`rgba(c,3,2,1),1`).toEqual("rgba(c,3,2,1),1");
+    expect(rgba`ABCDEF,1`).toEqual("ABCDEF,1");
+    expect(rgba`ABC DEF,1`).toEqual("ABC DEF,1");
+});
+
+it('rgba alpha add/sub', function () {
+    expect(rgba`rgba(1,2,3,0.1),+0.2`).toEqual("rgba(1,2,3,0.3)");
+    expect(rgba`rgba(1,2,3,0.1),-0.1`).toEqual("rgba(1,2,3,0)");
+    expect(rgba`rgba(1,2,3,0.1),-0.2`).toEqual("rgba(1,2,3,0)");
+    expect(rgba`rgba(1,2,3,1),-0.1`).toEqual("rgba(1,2,3,0.9)");
+    expect(rgba`rgba(1,2,3,1),+0.1`).toEqual("rgba(1,2,3,1)");
+    expect(rgba`rgba(1,2,3,0.5),+10%`).toEqual("rgba(1,2,3,0.6)");
+});
+
 it('rgbaOf', function () {
     const rgba2 = rgbaOf({
         "primary": "red",
@@ -34,23 +64,21 @@ it('rgbaOf', function () {
     expect(rgba2`secondary,25%`).toEqual("rgba(0,255,0,0.25)");
 });
 
-it('rgba alpha add/sub', function () {
-    expect(rgba`rgba(1,2,3,0.1),+0.2`).toEqual("rgba(1,2,3,0.3)");
-    expect(rgba`rgba(1,2,3,0.1),-0.1`).toEqual("rgba(1,2,3,0)");
-    expect(rgba`rgba(1,2,3,0.1),-0.2`).toEqual("rgba(1,2,3,0)");
-    expect(rgba`rgba(1,2,3,1),-0.1`).toEqual("rgba(1,2,3,0.9)");
-    expect(rgba`rgba(1,2,3,1),+0.1`).toEqual("rgba(1,2,3,1)");
-    expect(rgba`rgba(1,2,3,0.5),+10%`).toEqual("rgba(1,2,3,0.6)");
-});
+it('rgbaOf fallback color', function () {
+    const rgba2 = rgbaOf({
+        "primary": "red",
+        "secondary": "#00ff00",
+    }, "rgb(123,45,67)");
 
-it('unsupported formats', function () {
-    expect(rgba`#f0,30%`).toBeUndefined();
-    expect(rgba`,30%`).toBeUndefined();
-    expect(rgba`30%`).toBeUndefined();
-    expect(rgba`asd`).toBeUndefined();
-    expect(rgba``).toBeUndefined();
-    expect(rgba`#f00,,`).toBeUndefined();
-    expect(rgba`#f00,asd%`).toBeUndefined();
+    expect(rgba2`primary,0.2`).toEqual("rgba(255,0,0,0.2)");
+    expect(rgba2`primary,25%`).toEqual("rgba(255,0,0,0.25)");
+    expect(rgba2`secondary,100%`).toEqual("rgba(0,255,0,1)");
+    expect(rgba2`secondary,25%`).toEqual("rgba(0,255,0,0.25)");
+
+    expect(rgba2`success,25%`).toEqual("rgb(123,45,67)");
+    expect(rgba2`warn,25%`).toEqual("rgb(123,45,67)");
+    expect(rgba2`,25%`).toEqual("rgb(123,45,67)");
+    expect(rgba2``).toEqual("rgb(123,45,67)");
 });
 
 it('toRgba', function () {
@@ -88,4 +116,9 @@ it('toRgba', function () {
     // color names
     expect(toRgba("red")!.rgba).toEqual("rgba(255,0,0,1)");
     expect(toRgba("blue")!.rgba).toEqual("rgba(0,0,255,1)");
+});
+
+it('toRgba invalid value', function () {
+    // invalid value
+    expect(toRgba("RGBA(-1,0,0,0)")).toBeUndefined();
 });

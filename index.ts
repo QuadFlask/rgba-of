@@ -1,6 +1,6 @@
 import * as colorName from "color-name";
 
-export function rgbaOf(customColors: { [colorName: string]: string }): (strings: TemplateStringsArray, ...keys: any[]) => string | undefined {
+export function rgbaOf(customColors: { [colorName: string]: string }, fallbackColor?: string): (strings: TemplateStringsArray, ...keys: any[]) => string {
     return (strings: TemplateStringsArray, ...keys: any[]) => {
         const rawString = joinWithValues(strings.raw, keys);
         const i = rawString.lastIndexOf(",");
@@ -21,9 +21,14 @@ export function rgbaOf(customColors: { [colorName: string]: string }): (strings:
                     a = alpha;
                 }
                 return `rgba(${r},${g},${b},${p(Math.max(0, Math.min(a, 1)))})`;
+            } else {
+                return colorPart;
             }
+        } else if (fallbackColor) {
+            return fallbackColor;
+
         }
-        return undefined;
+        return rawString;
     }
 }
 
@@ -65,6 +70,8 @@ export function toRgba(s: string): { r: number, g: number, b: number, a: number,
             return undefined;
         }
     }
+    if (r < 0 || g < 0 || b < 0 || a < 0) return undefined;
+    if (isNaN(r) || isNaN(g) || isNaN(b) || isNaN(a)) return undefined;
     return {
         r, g, b, a: p(a),
         rgba: `rgba(${r},${g},${b},${p(a)})`
