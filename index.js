@@ -16,8 +16,8 @@ function rgbaOf(customColors, fallbackColor) {
         }
         var rawString = joinWithValues(strings.raw, keys);
         var i = rawString.lastIndexOf(",");
-        var colorPart = rawString.substr(0, i);
-        var opacityPart = rawString.substr(i + 1);
+        var colorPart = rawString.substr(0, i === -1 ? rawString.length : i);
+        var opacityPart = i > 0 ? rawString.substr(i + 1) : '';
         var colorValue = customColors[colorPart] || colorPart;
         var color = toRgba(colorValue);
         if (color) {
@@ -38,7 +38,7 @@ function rgbaOf(customColors, fallbackColor) {
                 return "rgba(" + r + "," + g + "," + b + "," + p(Math.max(0, Math.min(a, 1))) + ")";
             }
             else {
-                return colorPart;
+                return colorValue;
             }
         }
         else if (fallbackColor) {

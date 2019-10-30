@@ -4,8 +4,8 @@ export function rgbaOf(customColors: { [colorName: string]: string }, fallbackCo
     return (strings: TemplateStringsArray, ...keys: any[]) => {
         const rawString = joinWithValues(strings.raw, keys);
         const i = rawString.lastIndexOf(",");
-        const colorPart = rawString.substr(0, i);
-        const opacityPart = rawString.substr(i + 1);
+        const colorPart = rawString.substr(0, i === -1 ? rawString.length : i);
+        const opacityPart = i > 0 ? rawString.substr(i + 1) : '';
         const colorValue = customColors[colorPart] || colorPart;
         const color = toRgba(colorValue);
         if (color) {
@@ -22,11 +22,10 @@ export function rgbaOf(customColors: { [colorName: string]: string }, fallbackCo
                 }
                 return `rgba(${r},${g},${b},${p(Math.max(0, Math.min(a, 1)))})`;
             } else {
-                return colorPart;
+                return colorValue;
             }
         } else if (fallbackColor) {
             return fallbackColor;
-
         }
         return rawString;
     }

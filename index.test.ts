@@ -20,6 +20,8 @@ it('rgba', function () {
     expect(rgba`${'#ff0'},.3`).toEqual("rgba(255,255,0,0.3)");
     expect(rgba`#ff0,${0.3}`).toEqual("rgba(255,255,0,0.3)");
     expect(rgba`${'#ff0'},${0.3}`).toEqual("rgba(255,255,0,0.3)");
+    expect(rgba`#ff0000`).toEqual("#ff0000");
+    expect(rgba`#f00`).toEqual("#f00");
 });
 
 it('unsupported formats', function () {
@@ -62,6 +64,8 @@ it('rgbaOf', function () {
     expect(rgba2`primary,25%`).toEqual("rgba(255,0,0,0.25)");
     expect(rgba2`secondary,100%`).toEqual("rgba(0,255,0,1)");
     expect(rgba2`secondary,25%`).toEqual("rgba(0,255,0,0.25)");
+    expect(rgba2`primary`).toEqual("red");
+    expect(rgba2`secondary`).toEqual("#00ff00");
 });
 
 it('rgbaOf fallback color', function () {
