@@ -1,4 +1,4 @@
-import rgba, {rgbaOf, toRgba} from "./index";
+import rgba, {darken, darkenColor, rgbaOf, toRgba} from "./index";
 
 it('rgba', function () {
     expect(rgba`#102030,0.2`).toEqual("rgba(16,32,48,0.2)");
@@ -126,3 +126,21 @@ it('toRgba invalid value', function () {
     // invalid value
     expect(toRgba("RGBA(-1,0,0,0)")).toBeUndefined();
 });
+
+it('darkenColor', function () {
+    expect(darkenColor('rgba(255,255,255,1)', 0.5)).toEqual('rgba(128,128,128,1)');
+    expect(darkenColor('rgba(255,255,255,1)', 0.25)).toEqual('rgba(191,191,191,1)');
+    expect(darkenColor('rgba(255,0,0,0.5)', 0.1)).toEqual('rgba(230,0,0,0.5)');
+    expect(darkenColor('rgba(255,128,32,0.5)', 0.5)).toEqual('rgba(128,64,16,0.5)');
+    expect(darkenColor('rgba(255,255,255,1)', 1)).toEqual('rgba(0,0,0,1)');
+    expect(darkenColor('rgba(255,255,255,1)', 0.98)).toEqual('rgba(5,5,5,1)');
+});
+
+it('darken', function() {
+    expect(darken`rgba(255,255,255,1),0.5`).toEqual('rgba(128,128,128,1)');
+    expect(darken`rgba(255,255,255,1),0.25`).toEqual('rgba(191,191,191,1)');
+    expect(darken`rgba(255,0,0,0.5),0.1`).toEqual('rgba(230,0,0,0.5)');
+    expect(darken`rgba(255,128,32,0.5),0.5`).toEqual('rgba(128,64,16,0.5)');
+    expect(darken`rgba(255,255,255,1),1`).toEqual('rgba(0,0,0,1)');
+    expect(darken`rgba(255,255,255,1),0.98`).toEqual('rgba(5,5,5,1)');
+})

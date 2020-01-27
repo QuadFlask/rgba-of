@@ -24,10 +24,24 @@ export function rgbaOf(customColors: { [colorName: string]: string }, fallbackCo
             } else {
                 return colorValue;
             }
-        } else if (fallbackColor) {
-            return fallbackColor;
         }
-        return rawString;
+        return fallbackColor ?? rawString;
+    }
+}
+
+export function darkenOf(customColors: { [colorName: string]: string }, fallbackColor?: string): (strings: TemplateStringsArray, ...keys: any[]) => string {
+    return (strings: TemplateStringsArray, ...keys: any[]) => {
+        const rawString = joinWithValues(strings.raw, keys);
+        const i = rawString.lastIndexOf(",");
+        const colorPart = rawString.substr(0, i === -1 ? rawString.length : i);
+        const percentPart = i > 0 ? rawString.substr(i + 1) : '';
+        const result = percentPart.match(/([+-]?)([\d.]+)(%?)/);
+        if (result) {
+            const [_, sign, alphaString, isPercentile] = result;
+            const percent = isPercentile ? p(alphaString) / 100 : p(alphaString);
+            return darkenColor(colorPart, percent);
+        }
+        return fallbackColor ?? rawString;
     }
 }
 
@@ -87,5 +101,16 @@ const joinWithValues = (a: readonly string[], keys: any[]) => a.reduce((a, b, i)
     return a + (v !== undefined ? v : '') + b
 });
 
+export const darkenColor = (color: string, p: number) => {
+    const rgba = toRgba(color);
+    if (rgba) {
+        const {r, g, b, a} = rgba;
+        const np = Math.max(0, Math.min(1 - p, 1));
+        return `rgba(${Math.round(r * np)},${Math.round(g * np)},${Math.round(b * np)},${a})`;
+    }
+    return color;
+};
+
 const rgba = rgbaOf({});
+export const darken = darkenOf({});
 export default rgba;
