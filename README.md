@@ -13,6 +13,7 @@ $ npm install rgba-of --save
 
 ## Usage
 
+### rgba
 ```js
 import rgba from "rgba-of";
 
@@ -36,16 +37,22 @@ const color7 = rgba2`${'secondary'},25%`; // => "rgba(0,255,0,0.25)"
 // add or subtract alpha
 const color8 = rgba`red,-10%`; // => "rgba(255,0,0,0.9)"
 const color9 = rgba`rgba(255,255,255,0.5),+0.1`; // => "rgba(255,255,255,0.6)"
-
 ```
+
+### darken 
+
+```js
+import {darken} from "rgba-of";
+
+const color1 = darken`rgba(255,128,64,1),0.5`; // => rgba(128,64,32,1)
+```
+
 
 
 ## TODO
 
 ```js
 rgba`red`(0.5) // => rgba(255,0,0,0.5)
-
-darken`red,0.5` // => rgba(127,0,0,1)
 
 lighten`red` // lighter 0.1 step
 

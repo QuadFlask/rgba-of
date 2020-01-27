@@ -41,13 +41,30 @@ function rgbaOf(customColors, fallbackColor) {
                 return colorValue;
             }
         }
-        else if (fallbackColor) {
-            return fallbackColor;
-        }
-        return rawString;
+        return (fallbackColor !== null && fallbackColor !== void 0 ? fallbackColor : rawString);
     };
 }
 exports.rgbaOf = rgbaOf;
+function darkenOf(customColors, fallbackColor) {
+    return function (strings) {
+        var keys = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            keys[_i - 1] = arguments[_i];
+        }
+        var rawString = joinWithValues(strings.raw, keys);
+        var i = rawString.lastIndexOf(",");
+        var colorPart = rawString.substr(0, i === -1 ? rawString.length : i);
+        var percentPart = i > 0 ? rawString.substr(i + 1) : '';
+        var result = percentPart.match(/([+-]?)([\d.]+)(%?)/);
+        if (result) {
+            var _ = result[0], sign = result[1], alphaString = result[2], isPercentile = result[3];
+            var percent = isPercentile ? p(alphaString) / 100 : p(alphaString);
+            return exports.darkenColor(colorPart, percent);
+        }
+        return (fallbackColor !== null && fallbackColor !== void 0 ? fallbackColor : rawString);
+    };
+}
+exports.darkenOf = darkenOf;
 function toRgba(s) {
     var _a, _b;
     var r, g, b, a = 1;
@@ -114,5 +131,15 @@ var joinWithValues = function (a, keys) { return a.reduce(function (a, b, i) {
     var v = keys[i - 1];
     return a + (v !== undefined ? v : '') + b;
 }); };
+exports.darkenColor = function (color, p) {
+    var rgba = toRgba(color);
+    if (rgba) {
+        var r = rgba.r, g = rgba.g, b = rgba.b, a = rgba.a;
+        var np = Math.max(0, Math.min(1 - p, 1));
+        return "rgba(" + Math.round(r * np) + "," + Math.round(g * np) + "," + Math.round(b * np) + "," + a + ")";
+    }
+    return color;
+};
 var rgba = rgbaOf({});
+exports.darken = darkenOf({});
 exports.default = rgba;
